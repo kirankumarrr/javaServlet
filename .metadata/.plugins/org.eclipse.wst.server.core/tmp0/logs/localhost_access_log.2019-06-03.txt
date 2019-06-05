@@ -1,0 +1,13 @@
+127.0.0.1 - - [03/Jun/2019:07:54:26 +0530] "GET / HTTP/1.1" 404 1036
+127.0.0.1 - - [03/Jun/2019:07:54:27 +0530] "GET / HTTP/1.1" 404 1036
+0:0:0:0:0:0:0:1 - - [03/Jun/2019:07:54:30 +0530] "GET /ServletBasics/hello HTTP/1.1" 200 65
+127.0.0.1 - - [03/Jun/2019:11:45:48 +0530] "GET / HTTP/1.1" 404 1036
+0:0:0:0:0:0:0:1 - - [03/Jun/2019:11:45:53 +0530] "GET /ServletBasics/hello HTTP/1.1" 200 65
+127.0.0.1 - - [03/Jun/2019:12:02:20 +0530] "GET / HTTP/1.1" 404 1036
+0:0:0:0:0:0:0:1 - - [03/Jun/2019:12:02:21 +0530] "GET /ServletBasics/additionServlet HTTP/1.1" 200 -
+0:0:0:0:0:0:0:1 - - [03/Jun/2019:12:04:18 +0530] "GET /ServletBasics/numbers.html HTTP/1.1" 200 372
+0:0:0:0:0:0:0:1 - - [03/Jun/2019:12:04:25 +0530] "GET /ServletBasics/additionServlet?number1=15&number2=15&submit=Submit+Query HTTP/1.1" 200 19
+0:0:0:0:0:0:0:1 - - [03/Jun/2019:12:05:26 +0530] "GET /ServletBasics/numbers.html HTTP/1.1" 304 -
+0:0:0:0:0:0:0:1 - - [03/Jun/2019:12:05:32 +0530] "GET /ServletBasics/additionServlet?number1=8&number2=8&submit=Submit+Query HTTP/1.1" 200 19
+127.0.0.1 - - [03/Jun/2019:12:10:17 +0530] "GET / HTTP/1.1" 404 1036
+0:0:0:0:0:0:0:1 - - [03/Jun/2019:12:10:17 +0530] "GET /ServletBasics/hello HTTP/1.1" 200 65

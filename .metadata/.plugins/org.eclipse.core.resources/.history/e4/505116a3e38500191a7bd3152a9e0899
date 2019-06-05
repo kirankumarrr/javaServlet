@@ -1,0 +1,12 @@
+package com.kiran.jdbc.basics;
+
+import java.sql.DriverManager;
+
+public class AccountDAO {
+
+	public static void main(String[] args) {
+		DriverManager.getConnection("jdbc:mysql://localhost/mydb", "root", "yg88vw");
+	}
+
+}
+ 

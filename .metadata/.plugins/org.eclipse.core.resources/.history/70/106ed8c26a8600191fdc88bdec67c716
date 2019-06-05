@@ -1,0 +1,10 @@
+package com.kiran.jdbc.basics;
+
+import java.sql.*;
+
+public class ReadAccountDAO {
+	public static void main(String[] args) {
+
+	}
+
+}

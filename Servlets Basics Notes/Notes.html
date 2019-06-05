@@ -1,0 +1,281 @@
+04 Servlets Basics:
+
+	1) Created Class and mapped to particular uri with the help of web.xml file
+	2) extends GenericServlet  -->  import javax.servlet.GenericServlet;
+		or 
+		import javax.servlet.*;
+		@Override
+		public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+			response.setContentType("text/html");
+			PrintWriter out = response.getWriter();
+			out.println("<html>");
+			out.println("<body>");
+			out.println("<h1>Hello Servlets World</h1>");
+			out.println("</body>");
+			out.println("</html>");
+			
+		}
+		request is to read input fields from browser
+		response is to show on the browser that the logic we implemented
+		Another Example
+		if (request.getParameter("number1") != null && request.getParameter("number2") != null) {
+			Long num1 = Long.parseLong(request.getParameter("number1"));
+			Long num2 = Long.parseLong(request.getParameter("number2"));
+			PrintWriter out = response.getWriter();
+			out.println("The result is =" + (num1 + num2));
+		}		
+		
+JDBC Basics Concepts:
+		JDBC Architecute ---> $ componets that make JDBC Architecute or Application
+			JDBC Client -->Application code which we are developing
+			JDBC API  --> Standard API from Oracle -- we will learn more 
+			JDBC Driver  --> Is a program which is an interface b/w our Client and Database
+			JDBC Manager--> Is a helper class which finds a driver and establishes the connection to database
+			
+	JDBC API :::
+		It is a part of java.sql.*;	 
+		It is comprised of 
+			a)Connection	
+			b)Statement
+			c)ResultSet
+			d)and more 
+			 
+		Driver  --------------------------------------------------------------------------------------> Database 	
+				Excute SQL Statements  using the above interfaces and process results appropriately
+				
+	JDBC Driver:::
+		
+									----- >>>>                                           -------- >>>>> 
+		JAVA Client Application									--DRIVER--	   								Database					
+									<<<<<< ----- 										   <<<<<< -----
+									Driver takes instructions establishes connection with Database and execute 
+									sql statements againts the database 
+									we ave different drivers for different database (eg: oracle,mysql,sequal server	)
+									-->After execute is done with database it takes response and let know javaclient Application 
+									in a possible way that it can understand
+	JDBC Client :::
+		a) Connect to Database   --
+		b) Perform CRUD   -- Create , Read  , Delete , Update using sql statements
+		c) Process the response  -- DML statements 
+		d)	Handle the Exceptions --
+		e) DO Transaction Management --- 
+		f) Close the Connctions from Database
+	
+	JDBC Driver Manager ::
+			 A Driver Manager is one of the key classes in the Database API that acts as a the key helper or holder b/w the Driver and Java Application
+			 
+									------> Ask Manager to find sutiable Driver to connect to DB only Once
+									------> Manager figure outs driver and inform to JavaApplication
+			JavaApplication  		------> Now the task of the manager work is done.
+									-------> then onwards JavaApplication directly contacts the driver and do communications with Database
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+JDBC WORK :::
+	use mydb;  // this command will help to highlight the database to perform operation
+	//Creating table inside the database
+	create table account(
+		accno int,
+		lastname varchar(25),
+		firstname varchar(25),
+		bal int
+	)	
+	select * from account;
+	
+	
+Steps to perfomr CRUD Operation:
+		--- through DML and D'Qwell sequel statements
+	Imp Steps:
+1) Establish the connection
+2) Create the statement Object
+3) Submit the SQL query to DBMS 
+4) Close the statement
+5) Close the Connection-+
+
+JDBC Basics;
+downloading mysql connector java
+added jar to standard project 
+creating a className as AccountDAO
+	Here DAO means Data Acessing Object
+	
+	Here we connected to DATABASE
+	
+	public static void main(String[] args) {
+		try {
+		//'location',username,"password"
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "root", "yg88vw");
+			System.out.println(connection);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	"jdbc    -->main protocol 
+	:mysql	-->sub protocol   suppose for oracle it would be orcale
+	://  --> very specific to mysql
+	localhost	-->my meachine	 name since it is used as local host	
+				-->	if it would run on remote box we would have used IP address of that meachine
+	//localhost:8098 ::--> the driver use this port number to connect the database
+	/mydb" --database name
+	
+Statement Interface :::
+	Statement stmt = con.createStatement();
+	int result = stmt.executeUpdate("");  --> take DML Statements --> return num of records that are Insert , Update , Deleted into the database   
+ 	ResultSet rs = stmt.executeQuery("") --> Return List of rows 
+	
+Inserting record into Account TAble 
+
+try {
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "root", "yg88vw");
+			System.out.println(connection);
+			// Adding records into Database
+			Statement statement = connection.createStatement();
+			// passing sql query to bd INSERTION
+			/*
+			 * int result = statement.executeUpdate("insert into account values(1,'reddy','kiran kumar',999)");
+			 * System.out.println(result + " rows got inserted");
+			 */
+
+			// Updating Existing Records "
+			/*
+			 * int updateQuery = statement.executeUpdate("update account set bal=45 where accno=1");
+			 * System.out.println(updateQuery+"Query Updated");
+			 */
+			 
+			//DELETE RECORD
+			int resultDelete = statement.executeUpdate("delete from account where accno=1");
+			System.out.println(resultDelete +" Rows got Deleted");
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+44 JDBC Steps To Read Data:::
+	1) Establish the connection
+	2) Creating Statement object
+	3) Submit the statement
+	4) if(Records Exists---){
+			5) Process the record  --Read each One record at a time
+			if( 6) More Records) {
+				5) Process the record  --One record at a time
+			}
+			else {
+				7) Close the ResultSet, Statement , Connection
+			}
+		}
+		else {
+			7) Close the ResultSet, Statement , Connection
+		}
+		
+ResultSet::
+	Used to handle the data that comes after executing select query
+	it is an object oriented representation of a table of records retrieved from the database
+	
+	
+	ResultSet ;;; 
+	(logical pointer)cursor  ->     ZERO RECORD AREA  (Initial State)
+							
+									RECORD AREA		()
+							
+									NO RECORD AREA
+								
+		It provides 17 methods out of it 2 methods are important
+			
+					--->MOVE THE CURSOR
+		next()
+					--->Return True if more records avaiable else false then cursor will go to NO RECORD AREA
+					
+					
+		getXXX() --->  XXX means it may depends when get String data or Interger data and takes columne name or number
+		
+CODE to Read form Db and pass it into ResultSet;;;
+
+import java.sql.*;
+
+public class ReadAccountDAO {
+	public static void main(String[] args) {
+		try {
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "root", "yg88vw");
+			System.out.println(connection);
+			
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("select * from account");
+			while(resultSet.next()){
+				System.out.println("STARTED ROW");
+				System.out.println(resultSet.getInt(1));
+				System.out.println(resultSet.getString(2));
+				System.out.println(resultSet.getString(3));
+				System.out.println(resultSet.getInt(4));
+				System.out.println("ENDED ROW");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+}
+
+48 Clean up JDBC Resources ;;Need to close db connection and resultSet as well ;; we can do this in finally block 
+but in java 8 we can do in the below way
+try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "root", "yg88vw");
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery("select * from account");) {
+			System.out.println(connection);
+
+			while (resultSet.next()) {
+				System.out.println("STARTED ROW");
+				System.out.println(resultSet.getInt(1));
+				System.out.println(resultSet.getString(2));
+				System.out.println(resultSet.getString(3));
+				System.out.println(resultSet.getInt(4));
+				System.out.println("ENDED ROW");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+In the try block itself we need to mention connection to db then it automatically close when that try block is executed
+
+
+
+Service Provider MEchanism;;
+	1) how Driver Manager finds specific driver ??
+		it goes into -->Reference Library--> mysql-connector-java-8.0.16.jar  --> META_INF-Service --java.sql.Driver -
+			In this find it has many drivers ..
+			Driver Manager will give "jdbc:mysql://localhost/mydb" this to each Driver 
+			Which ever accepts it goes with it and ignore other Drivers
+			
+	2)  Where implemention happens to Connections , Statements and ResultSet ????
+		-->Reference Library--> mysql-connector-java-8.0.16.jar --->com.mysql.cj.jdbc 
+		if you go this location u can see implemention for Connections , Statements and ResultSet
+		
+		
+=======================================================================================================================
+Dynamic WEB Application
+
+GET                                                                                     POST
+	Default																				Mentioned Explicitly
+	3 Cases 																			<form method="post" ...
+		--> User Specified URL
+		--> User Click on a Hyper Link
+		--> User submits the form
+	Meant for getting data																Meant for posting data
+	
+	No Body																				Body Present 
+	
+	Query String 																		Payload/Body
+	
+	No Sensitive Data																	Can be sent
+	
+	Restriction on data																	No Restriction
+	
+	Idempotent(Can request Get for multiple types doesn't effect application state)		Not Indempotent(May lead to Duplicate data & State changes)
+	
+	
+ CreateUser.html ------>  CreateUserServlet.java  ------> DB
+									|
+									|
+									|
+		Response HTML			<----
+
+	
+		
+	

@@ -1,0 +1,27 @@
+package com.kiran.jdbc.basics;
+
+import java.sql.*;
+
+public class ReadAccountDAO {
+	public static void main(String[] args) {
+		try(Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "root", "yg88vw");) {
+			
+			System.out.println(connection);
+			
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("select * from account");
+			while(resultSet.next()){
+				System.out.println("STARTED ROW");
+				System.out.println(resultSet.getInt(1));
+				System.out.println(resultSet.getString(2));
+				System.out.println(resultSet.getString(3));
+				System.out.println(resultSet.getInt(4));
+				System.out.println("ENDED ROW");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+}

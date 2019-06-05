@@ -1,0 +1,20 @@
+package com.kiran.jdbc.basics;
+
+import java.sql.*;
+
+public class ReadAccountDAO {
+	private static Connection connection;
+
+	public static void main(String[] args) {
+		try {
+			connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "root", "yg88vw");
+			System.out.println(connection);
+			
+			connection.createStatement();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+}

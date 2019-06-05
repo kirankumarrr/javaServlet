@@ -1,0 +1,13 @@
+package com.kiran.jdbc.basics;
+
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class AccountDAO {
+
+	public static void main(String[] args) throws SQLException {
+		DriverManager.getConnection("jdbc:mysql://localhost/mydb", "root", "yg88vw");
+	}
+
+}
+ 

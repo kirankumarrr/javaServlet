@@ -1,0 +1,19 @@
+package com.kiran.servlet.basics;
+
+import java.io.IOException;
+
+import javax.servlet.GenericServlet;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+public class AdditionServlet extends GenericServlet {
+
+	@Override
+	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+		//to get the parameters from the request
+		String num1 = request.getParameter("number1");
+		String num2 = request.getParameter("number2");
+	}
+
+}

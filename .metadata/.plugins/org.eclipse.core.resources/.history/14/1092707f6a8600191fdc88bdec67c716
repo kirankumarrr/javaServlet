@@ -1,0 +1,9 @@
+package com.kiran.jdbc.basics;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class ReadAccountDAO {
+	Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "root", "yg88vw");
+	System.out.println(connection);
+}

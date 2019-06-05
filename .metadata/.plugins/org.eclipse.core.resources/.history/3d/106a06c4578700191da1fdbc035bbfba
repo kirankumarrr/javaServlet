@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Update User</title>
+</head>
+<body>
+	<h1>Update User:</h1>
+	<form method="post" action="deletedServlet">
+		<table>
+			<tr>
+				<td>Name:</td>
+				<td><input name="name" /></td>
+			</tr>\
+			<tr>
+				<td />
+				<td><input type="submit" value="Delete" /></td>
+		</table>
+	</form>
+</body>
+</html>
