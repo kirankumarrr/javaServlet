@@ -7,7 +7,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +19,16 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class CreatUserServlet Marks CreatUserServlet
  * with @WebServlet Annotation and assigns uri ==addServlet
  */
-@WebServlet("/addServlet")
+
+/**
+ * Instead of hardcoding db credentials we read from web.xml
+ * later will move this to web.xml check web.xml implemented for ReadUserFromDB.java
+ */
+@WebServlet(urlPatterns = "/addServlet", initParams = {
+		@WebInitParam(name = "dbUrl", value = "jdbc:mysql://localhost/mydb"),
+		@WebInitParam(name = "dbUser", value = "root"), @WebInitParam(name = "dbPassword", value = "yg88vw") })
+// Commenting this code
+// @WebServlet("/addServlet")
 public class CreatUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	// Created Global Level Connection Filed
@@ -27,11 +38,14 @@ public class CreatUserServlet extends HttpServlet {
 	 * Creating init() Good place to create DB Connection since it is called
 	 * only once
 	 */
-	public void init() {
+	// this ServletConfig gives access to read that Init parameters
+	public void init(ServletConfig config) {
 		try {
 			try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
 				Class.forName("com.mysql.jdbc.Driver");
-				connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "root", "yg88vw");
+				connection = DriverManager.getConnection(config.getInitParameter("dbUrl"),
+						config.getInitParameter("dbUser"), config.getInitParameter("dbPassword"));
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}

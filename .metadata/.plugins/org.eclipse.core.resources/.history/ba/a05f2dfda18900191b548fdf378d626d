@@ -1,0 +1,57 @@
+package com.kiran.jdbc.servlet.prepardStatment;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class ProductServlet
+ */
+@WebServlet("/ProductServlet")
+public class ProductServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	Connection con;
+	PreparedStatement stmt;
+
+	public void init() {
+		try {
+			// Call the Driver
+			Class.forName("com.mysql.jdbc.Driver");
+			// Create DB connection with the help of DriverManager
+			con = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "root", "yg88vw");
+			// Create prepareStatement
+			stmt = con.prepareStatement("insert into product values(?,?,?,?)");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+	public void destory() {
+		try {
+			stmt.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+}

@@ -275,7 +275,136 @@ GET                                                                             
 									|
 									|
 		Response HTML			<----
-
-	
 		
+CRUD operations are done ..pushed into GIT
+
+INIT Parameters??
+
+We dont hard coded db name , user and password
+
+String dbUser = config.getInitParameter("dbuser");
+
+
+	<servlet>
+		<servlet-name>ReadUserFromDB</servlet-name>
+		<servlet-class>com.kiran.user.servlets.ReadUserFromDB</servlet-class>
+		<init-param>
+			<param-name>dbUrl</param-name>
+			<param-value>jdbc:mysql://localhost/mydb</param-value>
+		</init-param>
+		<init-param>
+			<param-name>dbUser</param-name>
+			<param-value>root</param-value>
+		</init-param>
+		<init-param>
+			<param-name>dbPassword</param-name>
+			<param-value>yg88vw</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ReadUserFromDB</servlet-name>
+		<url-pattern>/readServlet</url-pattern>
+	</servlet-mapping>
 	
+	
+	java;
+	
+	public void init(ServletConfig config) {
+		try {
+			try {
+				// Loading class `com.mysql.jdbc.Driver'. This is deprecated.
+				// The new driver class is `com.mysql.cj.jdbc.Driver'. The
+				// driver is automatically registered via the SPI and manual
+				// loading of the driver class is generally unnecessary.
+				Class.forName("com.mysql.jdbc.Driver");
+				connection = DriverManager.getConnection(config.getInitParameter("dbUrl"),
+						config.getInitParameter("dbUser"), config.getInitParameter("dbPassword"));
+
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+ServletContext;
+why ?
+1)Share and Manipulate Data
+		0- setAttribute();
+		1- getAttribute();
+		2- removeAttribute();
+		3- getAttributesNames();
+2) To deal with Context params
+3) To Create the RequestDispatcher object for inter-servlet communication
+4) To store information in to the server log files using the log() method
+	//third party libraries like LogforJ //easy to use
+
+:::Context params:::
+---Not specific one servlet will apply for all
+--suppose u have same db credentials used all over the application better to use context-param instead for init-param
+	name -value
+	driver - OracleDriver
+	
+	web.xml 
+		<context-param>
+			<param-name>driver</param-name>
+			<param-value>jdbc:...</param-value>	
+		</context-param>	
+		
+	java ;;
+		String driver = sc.getInitParameter("driver");
+		
+
+Statement ;;;
+	
+	JDBC Client    ------>>>  Driver  ------->>> DB
+												compile  --> when sql query received it need to compile where query is ok or not
+												execute --->then execute
+											
+	Disadvantages -->>
+		1) Suppose if we pass few queries it's ok ..DB will compile before execute 
+		2) If we passs 1000 or more queries then DB need to compile and execute one by one which degrade the performance
+		
+	To solve this we have ;;
+	
+	---------------Prepared Statements--------------
+			-->Precompiled version of sequal statement reperested in OOP fashion
+			-->compliation happens only once
+			
+		PreparedStatement stmt = connection.prepareStatement
+		
+		insert into employee values(?,?,?)
+			//Here ? indicates dynamic queries
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Inter Servlet Communication;
+
+//go to next url
+	RequestDispatcher rd = request.getRequestDispatcher(uri)
+	1) way
+		rd.forward(request,reponse);
+		
+		client       ------> servlet 1 ------->servlet2   //here once servlet1 work is done it goes to servlet2 for futher operations
+		   |										|
+		   |   										|
+		   |<<<<<<<<<<<<<<<<<<<<<<<<-----------------
+		
+		
+	2) way
+	
+		rd.include(request,reponse);
+		
+					------>>>
+		Client      				Servlet1   + Servlet2 //here they both get merged
+					<<<---------
+					
+	USECASE;;																			
+		Login.html --->>  LoginServlert     ===/        Usr Login Success           - --------------------->> HomeServlet
+			|					|
+			|				hit DB and check wheather 
+			|				user exists or not
+			|				In case it failed it will redirect to LOGIN.HTML
+			<<<--------------
+			   include

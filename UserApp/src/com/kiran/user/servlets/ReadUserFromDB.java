@@ -7,7 +7,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Enumeration;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +21,14 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class CreatUserServlet Marks CreatUserServlet
  * with @WebServlet Annotation and assigns uri ==readServlet
  */
-@WebServlet("/readServlet")
+/**
+ * Readind db credentials from web.xml Here @WebServlet will be overriden so
+ * commenting the code
+ * 
+ */
+// @WebServlet("/readServlet")
+// When u use this below code no need to mention url-pattern in WEB.xml file
+@WebServlet(urlPatterns = "/readServlet")
 public class ReadUserFromDB extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	// Created Global Level Connection Filed
@@ -28,11 +38,36 @@ public class ReadUserFromDB extends HttpServlet {
 	 * Creating init() Good place to create DB Connection since it is called
 	 * only once
 	 */
-	public void init() {
+	public void init(ServletConfig config) {
 		try {
 			try {
+				// Loading class `com.mysql.jdbc.Driver'. This is deprecated.
+				// The new driver class is `com.mysql.cj.jdbc.Driver'. The
+				// driver is automatically registered via the SPI and manual
+				// loading of the driver class is generally unnecessary.
 				Class.forName("com.mysql.jdbc.Driver");
-				connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "root", "yg88vw");
+				// calling context-params
+
+				ServletContext servletContext = config.getServletContext();
+				connection = DriverManager.getConnection(servletContext.getInitParameter("dbUrl"),
+						servletContext.getInitParameter("dbUser"), servletContext.getInitParameter("dbPassword"));
+				System.out.println("onINit() ");
+				
+				Enumeration<String> initParameterNames = config.getInitParameterNames();
+				while (initParameterNames.hasMoreElements()) {
+					String eachElement = initParameterNames.nextElement();
+					System.out.println("Context Param Name " + eachElement);
+					System.out.println("Context Param Name " + servletContext.getInitParameter(eachElement));
+				}
+				
+				// Since using Servlet-Context concept commenting below code
+				// INIT Params
+				/*
+				 * connection =
+				 * DriverManager.getConnection(config.getInitParameter("dbUrl"),
+				 * config.getInitParameter("dbUser"),
+				 * config.getInitParameter("dbPassword"));
+				 */
 
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
