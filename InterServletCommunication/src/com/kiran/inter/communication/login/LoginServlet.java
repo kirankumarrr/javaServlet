@@ -37,19 +37,21 @@ public class LoginServlet extends HttpServlet {
 			Statement createStatement = con.createStatement();
 			ResultSet resultSet = createStatement
 					.executeQuery("select * from user where email='" + userName + "' and password='" + password + "'");
-
-			// check if 1 record
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("homeServlet");
 			if (resultSet.next()) {
 				System.out.println(resultSet.next() + "success");
 				// Calling request Dispatcher
-				RequestDispatcher requestDispatcher = request.getRequestDispatcher("homeServlet");
 				request.setAttribute("message", "Welcome to Interservlet Communication " + userName);
 				// forwarding to next page
 				requestDispatcher.forward(request, response);
+				/**
+				 * Fix this error
+				 * java.lang.IllegalStateException: Cannot forward after response has been committed
+				 */
 			} else {
 				System.out.println(resultSet.next() + "fail");
-				RequestDispatcher requestDispatcher2 = request.getRequestDispatcher("login.html");
-				requestDispatcher2.include(request, response);
+				requestDispatcher = request.getRequestDispatcher("login.html");
+				requestDispatcher.include(request, response);
 			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();

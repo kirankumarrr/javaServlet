@@ -408,3 +408,51 @@ Inter Servlet Communication;
 			|				In case it failed it will redirect to LOGIN.HTML
 			<<<--------------
 			   include
+			   
+Servert Initialization:::::
+	--Can be done in 2 ways
+	
+	 1) Lazy Initialization :: which is default behaviour
+		
+		WEB CLient ------>> Container ------->> Servelt //only initialize when webclients first request comes in 
+	 
+	 2) Pre Initialization :: initialization servelt on startup
+	 
+		Container ------->> Servelt // even before client request comes in
+		
+		
+	Done in web.xml
+	<servlet>
+		<servlet-name>............</servlet-name>
+		<servlet-class>...........</servlet-class>  
+		<load-on-startup>1</load-on-startup> //preority
+	</servlet>
+	<servlet>
+		<servlet-name>............</servlet-name>
+		<servlet-class>...........</servlet-class>
+		<load-on-startup>2/load-on-startup> //preority
+	</servlet>
+	
+	Examples :::
+		-- WEb services using CXF or Jersey  //servelet
+		-- Spring MVC Freamwork    //dispatcher
+		
+Servlet Listnerss:::
+	React to events handling in web application
+		--Request --request creation & destruction
+		--session--session been created or destroyed
+		--context--web application may be unloaded or loaded from the container
+		--async --oncomplete,onstart
+		
+	Implement::
+	class UserCountListener implements HttpSessionListener 
+	
+	@WebListener
+	
+	web.xml
+		<listener>
+			<listener-class>UserCountListener</listener-class>
+		</listener>
+		
+Servlet Filter:::
+	write about filter later
